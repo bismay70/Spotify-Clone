@@ -10,14 +10,27 @@ const addSong = async (req,res)=>{
         const imageUpload = await cloudinary.uploader.upload(imageFile.path,{resource_type:"video"}) 
 
         console.log(name,desc,album,audioUpload,imageUpload)
-        
+
     }catch(error){
 
     }
 }
 
 const listSong = async (req,res) =>{
+        try{
+            const allSongs = await songModel.find({})
+            res.json({success:true,songs:allSongs})
+        } catch(error){
+            res.json({success:false})
+        }
+}
 
+const removeSong = async (req,res)=>{
+    try{
+
+    }catch(error){
+        
+    }
 }
 
 export {addSong,listSong}
