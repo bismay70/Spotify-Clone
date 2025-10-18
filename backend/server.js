@@ -4,6 +4,8 @@ import 'dotenv/config'
 import songRouter from './src/routes/songRoute.js'
 import connectDB from './src/config/mongodb.js'
 import connectCloudinary from './src/config/cloudinary.js'
+import albumRouter from './src/routes/albumRoute.js'
+
 
 // app config
 const app = express();
@@ -16,6 +18,9 @@ app.use(express.json());
 app.use(cors());             //connect bcknd frntnd even if diff port
 
 // initialize routes
+app.use('/api/song',songRouter)
+app.use('/api/album',albumRouter)
+
 app.get('/',(req,res)=>res.send("APi working"))
 
 app.listen(port,()=>console.log(`Server on ${port}`))
