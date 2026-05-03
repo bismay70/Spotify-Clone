@@ -1,5 +1,5 @@
-import {v2 as cloudinary} from 'cloudinary'
 import songModel from '../models/songModel.js'
+import { uploadMedia } from '../utils/mediaUpload.js'
 
 const addSong = async (req,res)=>{
     try{
@@ -8,8 +8,8 @@ const addSong = async (req,res)=>{
         const album = req.body.album;
         const audioFile = req.files.audio[0];
         const imageFile = req.files.image[0];
-        const audioUpload = await cloudinary.uploader.upload(audioFile.path,{resource_type:"video"}) 
-        const imageUpload = await cloudinary.uploader.upload(imageFile.path,{resource_type:"image"}) 
+        const audioUpload = await uploadMedia({ req, file: audioFile, resourceType: "video" }) 
+        const imageUpload = await uploadMedia({ req, file: imageFile, resourceType: "image" }) 
 
         const durationInSeconds = Math.round(audioUpload.duration || 0)
         const duration = `${Math.floor(durationInSeconds / 60)}:${String(durationInSeconds % 60).padStart(2, '0')}`

@@ -16,6 +16,7 @@ connectCloudinary();
 //middlewares
 app.use(express.json());
 app.use(cors());             //connect bcknd frntnd even if diff port
+app.use('/uploads', express.static('uploads'));
 
 // initialize routes
 app.use('/api/song',songRouter)

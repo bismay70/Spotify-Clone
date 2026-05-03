@@ -1,5 +1,5 @@
-import { v2 as cloudinary } from 'cloudinary'
 import albumModel from '../models/albumModel.js'
+import { uploadMedia } from '../utils/mediaUpload.js'
 
 const addAlbum = async (req, res) => {
     try {
@@ -7,7 +7,7 @@ const addAlbum = async (req, res) => {
         const desc = req.body.desc;
         const bgColor = req.body.bgColor;
         const imageFile = req.file;
-        const imageUpload = await cloudinary.uploader.upload(imageFile.path, { resource_type: "image" });
+        const imageUpload = await uploadMedia({ req, file: imageFile, resourceType: "image" });
 
         const albumData = {
             name,
