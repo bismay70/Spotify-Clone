@@ -33,6 +33,10 @@ useEffect(() => {
 const onSubmitHandler = async (e) => {
 
 e.preventDefault();
+if (!song || !image) {
+  toast.error("Please upload both song and cover art")
+  return
+}
 setLoading(true);
 try{
 const formData = new FormData();

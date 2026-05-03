@@ -6,6 +6,11 @@ const addSong = async (req,res)=>{
         const name = req.body.name;
         const desc= req.body.desc;
         const album = req.body.album;
+
+        if (!req.files || !req.files.audio || !req.files.image) {
+            return res.json({ success: false, message: "Audio and image files are required" })
+        }
+
         const audioFile = req.files.audio[0];
         const imageFile = req.files.image[0];
         const audioUpload = await uploadMedia({ req, file: audioFile, resourceType: "video" }) 

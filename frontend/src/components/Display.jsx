@@ -2,6 +2,9 @@ import React from 'react'
 import { Route, Routes, useLocation } from 'react-router-dom'
 import DisplayHome from './DisplayHome'
 import DisplayAlbum from './DisplayAlbum'
+import DisplaySearch from './DisplaySearch'
+import DisplayPlaylist from './DisplayPlaylist'
+import DisplayPlaylists from './DisplayPlaylists'
 import { useRef , useEffect, useContext} from 'react'
 import { PlayerContext } from '../context/PlayerContext'
 
@@ -29,6 +32,9 @@ const Display = () => {
         <Routes>
             <Route path='/' element={<DisplayHome/>}/>
             <Route path='/album/:id' element={<DisplayAlbum/>}/>
+            <Route path='/search' element={<DisplaySearch/>}/>
+            <Route path='/playlist/:id' element={<DisplayPlaylist/>}/>
+            <Route path='/playlists' element={<DisplayPlaylists/>}/>
         </Routes>
     </div>
   )

@@ -14,6 +14,7 @@ const PlayerContextProvider = (props) => {
     const [songs, setSongs] = useState(fallbackSongs);
     const [track,setTrack] = useState(fallbackSongs[1]);
     const [playStatus,setPlayStatus] = useState(false);
+    const [playlists, setPlaylists] = useState([]);
     const [time,setTime] = useState({
         currentTime:{
             second:0, minute:0
@@ -55,6 +56,44 @@ const PlayerContextProvider = (props) => {
     const seekSong = async (e) => {
         audioRef.current.currentTime = (e.nativeEvent.offsetX / seekBg.current.offsetWidth) * audioRef.current.duration;
         seekBar.current.style.width = (e.nativeEvent.offsetX / seekBg.current.offsetWidth) * 100 + "%";
+    }
+
+    const createPlaylist = (name) => {
+        const newPlaylist = {
+            id: Date.now(),
+            name,
+            songs: []
+        }
+        setPlaylists([...playlists, newPlaylist])
+        return newPlaylist
+    }
+
+    const addToPlaylist = (playlistId, song) => {
+        setPlaylists(playlists.map(playlist => {
+            if (playlist.id === playlistId) {
+                return {
+                    ...playlist,
+                    songs: playlist.songs.some(s => s.id === song.id) ? playlist.songs : [...playlist.songs, song]
+                }
+            }
+            return playlist
+        }))
+    }
+
+    const removeFromPlaylist = (playlistId, songId) => {
+        setPlaylists(playlists.map(playlist => {
+            if (playlist.id === playlistId) {
+                return {
+                    ...playlist,
+                    songs: playlist.songs.filter(s => s.id !== songId)
+                }
+            }
+            return playlist
+        }))
+    }
+
+    const deletePlaylist = (playlistId) => {
+        setPlaylists(playlists.filter(p => p.id !== playlistId))
     }
 
     useEffect(()=>{
@@ -139,8 +178,12 @@ const PlayerContextProvider = (props) => {
             playWithId,
             previous,
             next,
-            seekSong
-
+            seekSong,
+            playlists,
+            createPlaylist,
+            addToPlaylist,
+            removeFromPlaylist,
+            deletePlaylist
     }
     return (
         <PlayerContext.Provider value={contextValue}>

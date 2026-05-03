@@ -9,8 +9,12 @@ const hasCloudinaryConfig = Boolean(
 const getBaseUrl = (req) => `${req.protocol}://${req.get('host')}`
 
 export const uploadMedia = async ({ req, file, resourceType }) => {
-  if (hasCloudinaryConfig) {
-    return cloudinary.uploader.upload(file.path, { resource_type: resourceType })
+  try {
+    if (hasCloudinaryConfig) {
+      return await cloudinary.uploader.upload(file.path, { resource_type: resourceType })
+    }
+  } catch (error) {
+    console.log('Cloudinary upload failed, using local storage:', error.message)
   }
 
   return {
