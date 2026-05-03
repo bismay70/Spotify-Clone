@@ -1,6 +1,6 @@
 import {useState,useEffect} from 'react'
 import axios from 'axios'
-import {url} from '../App'
+import {url} from '../api'
 import { toast } from 'react-toastify'
 
 const ListSong = () => {
@@ -13,8 +13,19 @@ const fetchSongs = async () => {
     if(response.data.success){
       setData(response.data.songs)
     }
-    setData(data)
-  } catch (error) {
+  } catch {
+    toast.error("error occur")
+  }
+}
+
+const removeSong = async (id) => {
+  try {
+    const response = await axios.post(`${url}/api/song/remove`, { id })
+    if (response.data.success) {
+      toast.success(response.data.message)
+      fetchSongs()
+    }
+  } catch {
     toast.error("error occur")
   }
 }
@@ -42,7 +53,7 @@ useEffect(() => {
                 <p>{item.name}</p>
                 <p>{item.album}</p>
                 <p>{item.duration}</p>
-                <p>x</p>
+                <p onClick={() => removeSong(item._id)} className="cursor-pointer">x</p>
               </div>
             )
         })}

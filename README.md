@@ -52,7 +52,7 @@ Create a `.env` file in `backend/` with the values used by the server:
 MONGODB_URI=your_mongodb_connection_string
 CLOUDINARY_NAME=your_cloudinary_name
 CLOUDINARY_API_KEY=your_cloudinary_api_key
-CLOUDIANRY_SECRET_KEY=your_cloudinary_secret_key
+CLOUDINARY_SECRET_KEY=your_cloudinary_secret_key
 PORT=4000
 ```
 

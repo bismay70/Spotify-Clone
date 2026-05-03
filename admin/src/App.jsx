@@ -8,7 +8,6 @@ import ListAlbum from './pages/ListAlbum.jsx'
 import Sidebar from './components/Sidebar'
 import { Routes, Route } from 'react-router-dom'
 
-export const url = "http://localhost:4000"
 const App = () => {
   return (
     <div className="flex items-start min-h-screen">

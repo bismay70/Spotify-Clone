@@ -2,16 +2,18 @@ import React from 'react'
 import { Route, Routes, useLocation } from 'react-router-dom'
 import DisplayHome from './DisplayHome'
 import DisplayAlbum from './DisplayAlbum'
-import { useRef , useEffect} from 'react'
-import { albumsData } from '../assets/frontend-assets/assets'
+import { useRef , useEffect, useContext} from 'react'
+import { PlayerContext } from '../context/PlayerContext'
 
 const Display = () => {
 
     const displayRef = useRef();
     const location = useLocation();
+    const { albums } = useContext(PlayerContext)
     const isAlbum = location.pathname.includes('album');
-    const albumId = isAlbum ? location.pathname.slice(-1) : "";
-    const bgColor = albumsData[Number(albumId)].bgColor;
+    const albumMatch = location.pathname.match(/\/album\/(\d+)/);
+    const albumId = albumMatch ? Number(albumMatch[1]) : null;
+    const bgColor = isAlbum && albums[albumId] ? albums[albumId].bgColor : '#121212';
 
     useEffect(()=>{
         if(isAlbum){
@@ -20,7 +22,7 @@ const Display = () => {
         else{
             displayRef.current.style.background = '#121212';
         }
-    })
+    },[isAlbum,bgColor])
 
   return (
     <div ref={displayRef} className='w-[100%] m-2 px-6 pt-4 rounded bg-[#121212] text-white overflow-auto lg:w-[75%] lg:ml-0'>

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
-import { url } from '../App'
+import { url } from '../api'
 import { toast } from 'react-toastify'
 
 const ListAlbum = () => {
@@ -13,7 +13,7 @@ const ListAlbum = () => {
       if (response.data.success) {
         setData(response.data.albums)
       }
-    } catch (error) {
+    } catch {
       toast.error("Error occurred")
     }
   }
@@ -25,7 +25,7 @@ const ListAlbum = () => {
         toast.success(response.data.message)
         await fetchAlbums()
       }
-    } catch (error) {
+    } catch {
       toast.error("Error occurred")
     }
   }
@@ -52,7 +52,7 @@ const ListAlbum = () => {
               <img className="w-12" src={item.image} alt="" />
               <p>{item.name}</p>
               <p>{item.desc}</p>
-              <input type="color" value={item.bgColour} readOnly />
+              <input type="color" value={item.bgColor} readOnly />
               <p onClick={()=>removeAlbum(item._id)} className='cursor-pointer'>x</p>
             </div>
           )

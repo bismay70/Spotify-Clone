@@ -1,5 +1,5 @@
 import { createContext ,useEffect,useRef, useState} from "react";
-import { songsData } from "../assets/frontend-assets/assets";
+import { albumsData as fallbackAlbums, songsData as fallbackSongs } from "../assets/frontend-assets/assets";
 
 
 export const PlayerContext = createContext();
@@ -10,7 +10,9 @@ const PlayerContextProvider = (props) => {
     const seekBg = useRef();
     const seekBar = useRef();
 
-    const [track,setTrack] = useState(songsData[1]);
+    const [albums, setAlbums] = useState(fallbackAlbums);
+    const [songs, setSongs] = useState(fallbackSongs);
+    const [track,setTrack] = useState(fallbackSongs[1]);
     const [playStatus,setPlayStatus] = useState(false);
     const [time,setTime] = useState({
         currentTime:{
@@ -32,24 +34,21 @@ const PlayerContextProvider = (props) => {
     }
 
     const playWithId = async (id) => {
-        await setTrack(songsData[id]);
-         await audioRef.current.play();
         setPlayStatus(true);
+        setTrack(songs[id]);
     }
 
     const previous = async () => {
         if(track.id>0){
-            await setTrack(songsData[track.id-1]);
-            await audioRef.current.play();
             setPlayStatus(true);
+            setTrack(songs[track.id-1]);
         }
     }
 
     const next = async () => {
-        if(track.id<songsData.length-1){
-            await setTrack(songsData[track.id+1]);
-            await audioRef.current.play();
+        if(track.id<songs.length-1){
             setPlayStatus(true);
+            setTrack(songs[track.id+1]);
         }
     }
 
@@ -76,11 +75,63 @@ const PlayerContextProvider = (props) => {
         },1000)
     },[audioRef])
 
+    useEffect(() => {
+        const fetchCatalog = async () => {
+            try {
+                const [songsResponse, albumsResponse] = await Promise.all([
+                    fetch("http://localhost:4000/api/song/list"),
+                    fetch("http://localhost:4000/api/album/list")
+                ])
+
+                const songsJson = await songsResponse.json()
+                const albumsJson = await albumsResponse.json()
+
+                if (songsJson.success && songsJson.songs?.length) {
+                    const mappedSongs = songsJson.songs.map((item, index) => ({
+                        id: index,
+                        name: item.name,
+                        image: item.image,
+                        file: item.file,
+                        desc: item.desc,
+                        duration: item.duration,
+                        album: item.album
+                    }))
+                    setSongs(mappedSongs)
+                    setTrack(mappedSongs[0])
+                }
+
+                if (albumsJson.success && albumsJson.albums?.length) {
+                    const mappedAlbums = albumsJson.albums.map((item, index) => ({
+                        id: index,
+                        name: item.name,
+                        image: item.image,
+                        desc: item.desc,
+                        bgColor: item.bgColor
+                    }))
+                    setAlbums(mappedAlbums)
+                }
+            } catch {
+                setAlbums(fallbackAlbums)
+                setSongs(fallbackSongs)
+            }
+        }
+
+        fetchCatalog()
+    }, [])
+
+    useEffect(() => {
+        if (playStatus && audioRef.current) {
+            audioRef.current.play();
+        }
+    }, [track, playStatus])
+
     const contextValue={
             audioRef,
             seekBg,
             seekBar,
             track,setTrack,
+            albums,
+            songs,
             playStatus,setPlayStatus,
             time,setTime,
             play,

@@ -5,14 +5,14 @@ const addAlbum = async (req, res) => {
     try {
         const name = req.body.name;
         const desc = req.body.desc;
-        const bgColour = req.body.bgColour;
+        const bgColor = req.body.bgColor;
         const imageFile = req.file;
         const imageUpload = await cloudinary.uploader.upload(imageFile.path, { resource_type: "image" });
 
         const albumData = {
             name,
             desc,
-            bgColour,
+            bgColor,
             image: imageUpload.secure_url
         }
 

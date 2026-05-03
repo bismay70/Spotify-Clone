@@ -1,18 +1,34 @@
 import React from 'react'
 import {assets } from '../assets/assets'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import axios from 'axios'
 import {toast} from 'react-toastify'
+import { url } from '../api'
 
 const AddSong = () => {
 
-const [image, setImage] = useState(false);
-const [song, setSong] = useState(false);
+const [image, setImage] = useState(null);
+const [song, setSong] = useState(null);
 const [name, setName] = useState("");
 const [desc, setDesc] = useState("");
 const [album, setAlbum] = useState("none");
 const [loading, setLoading] = useState(false);
 const [albumData, setAlbumData] = useState([]);
+
+const fetchAlbums = async () => {
+  try {
+    const response = await axios.get(`${url}/api/album/list`)
+    if (response.data.success) {
+      setAlbumData(response.data.albums)
+    }
+  } catch {
+    toast.error("Unable to load albums")
+  }
+}
+
+useEffect(() => {
+  fetchAlbums()
+}, [])
 
 const onSubmitHandler = async (e) => {
 
@@ -30,16 +46,16 @@ formData.append("album", album);
 const response = await axios.post(`${url}/api/song/add`, formData); 
 if(response.data.success){
   toast.success("Song Added Successfully");
-  setImage(false);
-  setSong(false);
+  setImage(null);
+  setSong(null);
   setName("");
   setDesc("");
   setAlbum("none");
 } else {
-  toast.error("somethogn went wrong");
+  toast.error(response.data.message || "Something went wrong");
 }
       }  catch(error){
-        toast.log("error occurerd");
+        toast.error("Error occurred");
 }setLoading(false);
 }
   return loading ? (
@@ -59,7 +75,7 @@ if(response.data.success){
           <div className="flex flex-col gap-4">
             <p>Upload Cover Art</p>
             <input onChange={(e)=>setImage(e.target.files[0])} type="file" id="cover_art" accept='image/*' hidden/>
-            <label htmlFor='image'>
+            <label htmlFor='cover_art'>
                 <img src={image ? URL.createObjectURL(image) : assets.upload_area} className="w-24 cursor-pointer" alt="" />
             </label>
           </div>
@@ -71,13 +87,16 @@ if(response.data.success){
         </div>
         <div className="flex flex-col gap-2.5 ">
             <p>Song Description</p>
-            <input onChange={(e)=>setDesc(removeEventListener.target.value)} value={desc} type="text" className="p-2.5 border-2 border-gray-400 rounded-md w-[max(40vw,250px)] outline-green-600" placeholder="type here" required />
+            <input onChange={(e)=>setDesc(e.target.value)} value={desc} type="text" className="p-2.5 border-2 border-gray-400 rounded-md w-[max(40vw,250px)] outline-green-600" placeholder="type here" required />
         </div>
 
         <div className="flex flex-col gap-2.5 ">
             <p>Album</p>
-            <select onChange={(e)=>setAlbum(e.target.value)} defaultValue={album} className="bg-transparent outline-green-600 border-2 border-gray-400 p-2.5 w-[150px]" required>
-                <option value="none" disabled selected>Select Album</option>
+            <select onChange={(e)=>setAlbum(e.target.value)} value={album} className="bg-transparent outline-green-600 border-2 border-gray-400 p-2.5 w-[150px]" required>
+              <option value="none" disabled>Select Album</option>
+              {albumData.map((item) => (
+                <option key={item._id} value={item.name}>{item.name}</option>
+              ))}
             </select>
         </div>
 
