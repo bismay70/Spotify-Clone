@@ -127,9 +127,12 @@ const PlayerContextProvider = (props) => {
     useEffect(() => {
         const fetchCatalog = async () => {
             try {
+                // Support both local development and production
+                const backendURL = import.meta.env.VITE_BACKEND_URL || "http://localhost:4000"
+                
                 const [songsResponse, albumsResponse] = await Promise.all([
-                    fetch("http://localhost:4000/api/song/list"),
-                    fetch("http://localhost:4000/api/album/list")
+                    fetch(`${backendURL}/api/song/list`),
+                    fetch(`${backendURL}/api/album/list`)
                 ])
 
                 const songsJson = await songsResponse.json()
