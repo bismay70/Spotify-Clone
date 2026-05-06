@@ -2,6 +2,13 @@
 
 A Spotify-inspired full-stack music app built with React, Vite, Express, MongoDB, and Cloudinary. The repo includes a public-facing music player, an admin panel for managing content, and a backend API for songs and albums.
 
+## 📸 Screenshots
+
+<div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+  <img src="./s1.png" alt="Screenshot 2" width="300" style="border-radius: 8px;">
+  <img src="./s2.png" alt="Screenshot 3" width="300" style="border-radius: 8px;">
+</div>
+
 ## Features
 
 - Play and pause music
