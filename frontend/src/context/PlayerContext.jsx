@@ -1,5 +1,5 @@
 import { createContext ,useEffect,useRef, useState} from "react";
-import { albumsData as fallbackAlbums, songsData as fallbackSongs } from "../assets/frontend-assets/assets";
+import { albumsData as fallbackAlbums, songsData as fallbackSongs, newHitsData as fallbackNewHits, podcastsData as fallbackPodcasts } from "../assets/frontend-assets/assets";
 
 
 export const PlayerContext = createContext();
@@ -12,6 +12,8 @@ const PlayerContextProvider = (props) => {
 
     const [albums, setAlbums] = useState(fallbackAlbums);
     const [songs, setSongs] = useState(fallbackSongs);
+    const [newHits, setNewHits] = useState(fallbackNewHits);
+    const [podcasts, setPodcasts] = useState(fallbackPodcasts);
     const [track,setTrack] = useState(fallbackSongs[1]);
     const [playStatus,setPlayStatus] = useState(false);
     const [playlists, setPlaylists] = useState([]);
@@ -36,7 +38,15 @@ const PlayerContextProvider = (props) => {
 
     const playWithId = async (id) => {
         setPlayStatus(true);
-        setTrack(songs[id]);
+        if (songs[id]) {
+            setTrack(songs[id]);
+        }
+    }
+
+    const playMedia = async (media) => {
+        // Play any media object (song, podcast, or playlist item)
+        setPlayStatus(true);
+        setTrack(media);
     }
 
     const previous = async () => {
@@ -164,18 +174,21 @@ const PlayerContextProvider = (props) => {
         }
     }, [track, playStatus])
 
-    const contextValue={
+        const contextValue={
             audioRef,
             seekBg,
             seekBar,
             track,setTrack,
             albums,
             songs,
+            newHits,
+            podcasts,
             playStatus,setPlayStatus,
             time,setTime,
             play,
             pause,
             playWithId,
+            playMedia,
             previous,
             next,
             seekSong,

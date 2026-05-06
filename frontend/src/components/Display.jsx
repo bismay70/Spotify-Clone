@@ -5,6 +5,7 @@ import DisplayAlbum from './DisplayAlbum'
 import DisplaySearch from './DisplaySearch'
 import DisplayPlaylist from './DisplayPlaylist'
 import DisplayPlaylists from './DisplayPlaylists'
+import Login from './Login'
 import { useRef , useEffect, useContext} from 'react'
 import { PlayerContext } from '../context/PlayerContext'
 
@@ -35,6 +36,7 @@ const Display = () => {
             <Route path='/search' element={<DisplaySearch/>}/>
             <Route path='/playlist/:id' element={<DisplayPlaylist/>}/>
             <Route path='/playlists' element={<DisplayPlaylists/>}/>
+            <Route path='/login' element={<Login/>}/>
         </Routes>
     </div>
   )

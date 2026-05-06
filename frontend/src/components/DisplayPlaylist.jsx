@@ -1,13 +1,15 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import Navbar from "./Navbar";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { assets } from "../assets/frontend-assets/assets";
 import { PlayerContext } from "../context/PlayerContext";
 
 const DisplayPlaylist = () => {
   const { id } = useParams();
-  const { playlists, playWithId, removeFromPlaylist } =
+  const navigate = useNavigate();
+  const { playlists, songs, podcasts, playMedia, removeFromPlaylist, addToPlaylist } =
     useContext(PlayerContext);
+  const [showAddSongs, setShowAddSongs] = useState(false);
   const playlist = playlists.find((p) => p.id === Number(id));
 
   if (!playlist) {
@@ -21,6 +23,10 @@ const DisplayPlaylist = () => {
     );
   }
 
+  const availableSongs = [...songs, ...podcasts].filter(
+    song => !playlist.songs.some(s => s.id === song.id)
+  );
+
   return (
     <>
       <Navbar />
@@ -32,8 +38,36 @@ const DisplayPlaylist = () => {
           <p>Playlist</p>
           <h2 className="text-5xl font-bold mb-4 md:text-7xl">{playlist.name}</h2>
           <h4>{playlist.songs.length} songs</h4>
+          <button 
+            onClick={() => setShowAddSongs(!showAddSongs)}
+            className="mt-4 bg-green-600 text-white px-6 py-2 rounded-full hover:bg-green-700 w-fit font-semibold text-sm"
+          >
+            {showAddSongs ? "Done" : "+ Add Songs"}
+          </button>
         </div>
       </div>
+
+      {showAddSongs && (
+        <div className="mt-8 mb-8">
+          <h3 className="text-xl font-bold mb-4">Available Songs & Podcasts</h3>
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+            {availableSongs.map((item, index) => (
+              <div key={index} className="bg-gray-800 p-2 rounded hover:bg-gray-700 transition">
+                <img src={item.image} alt={item.name} className="w-full h-32 object-cover rounded mb-2"/>
+                <p className="text-sm font-semibold truncate">{item.name}</p>
+                <button
+                  onClick={() => {
+                    addToPlaylist(playlist.id, item);
+                  }}
+                  className="mt-2 w-full bg-green-600 text-white px-2 py-1 rounded text-xs hover:bg-green-700 font-semibold"
+                >
+                  Add
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       <div className="grid grid-cols-3 sm:grid-cols-4 mt-10 mb-4 pl-2 text-[#a7a7a7]">
         <p>
@@ -48,7 +82,7 @@ const DisplayPlaylist = () => {
       {playlist.songs.length > 0 ? (
         playlist.songs.map((item, index) => (
           <div
-            onClick={() => playWithId(item.id)}
+            onClick={() => playMedia(item)}
             key={index}
             className="group grid grid-cols-3 sm:grid-cols-4 mt-4 mb-4 gap-2 p-2 text-[#a7a7a7] hover:bg-[#ffffff2b] cursor-pointer items-center"
           >
@@ -57,7 +91,7 @@ const DisplayPlaylist = () => {
               <img className="inline w-10 mr-5" src={item.image} alt="" />
               {item.name}
             </p>
-            <p className="text-[15px]">{item.album}</p>
+            <p className="text-[15px]">{item.album || item.host || "Custom"}</p>
             <p className="text-[15px] hidden sm:block">Today</p>
             <div className="text-center">
               <p
@@ -74,7 +108,7 @@ const DisplayPlaylist = () => {
         ))
       ) : (
         <p className="text-center text-gray-400 py-10">
-          No songs in this playlist yet.
+          No songs in this playlist yet. Click "+ Add Songs" to get started!
         </p>
       )}
     </>

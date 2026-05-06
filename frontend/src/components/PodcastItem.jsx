@@ -2,23 +2,24 @@ import React from 'react'
 import { useContext, useState } from 'react'
 import { PlayerContext } from '../context/PlayerContext'
 
-const SongItem = ({name,image,desc,id,song}) => {
+const PodcastItem = ({name,image,desc,host,id,podcast}) => {
 
     const {playMedia, playlists, addToPlaylist} = useContext(PlayerContext);
     const [showPlaylistMenu, setShowPlaylistMenu] = useState(false);
-    const songData = song || {id, name, desc, image};
+    const podcastData = {id, name, desc, image, host, file: podcast.file, duration: podcast.duration};
 
     const handleAddToPlaylist = (playlistId, e) => {
         e.stopPropagation();
-        addToPlaylist(playlistId, songData);
+        addToPlaylist(playlistId, podcastData);
         setShowPlaylistMenu(false);
     }
 
   return (
-    <div onClick={()=>playMedia(songData)} className="flex-shrink-0 w-40 p-2 px-3 rounded cursor-pointer hover:bg-[#ffffff26] relative group">
+    <div onClick={()=>playMedia(podcastData)} className="flex-shrink-0 w-40 p-2 px-3 rounded cursor-pointer hover:bg-[#ffffff26] relative group">
         <img className="rounded w-full h-40 object-cover" src={image}/>
         <p className="font-bold mt-2 mb-1 text-sm truncate">{name}</p>
         <p className="text-slate-200 text-xs truncate">{desc}</p>
+        <p className="text-gray-400 text-xs mt-1 truncate">{host}</p>
         
         <button 
             onClick={(e) => {
@@ -53,4 +54,4 @@ const SongItem = ({name,image,desc,id,song}) => {
   )
 }
 
-export default SongItem
+export default PodcastItem

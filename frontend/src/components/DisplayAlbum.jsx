@@ -7,7 +7,7 @@ import { PlayerContext } from "../context/PlayerContext";
 
 const DisplayAlbum = () => {
   const { id } = useParams();
-  const { playWithId, albums, songs } = useContext(PlayerContext);
+  const { playMedia, albums, songs } = useContext(PlayerContext);
   const albumData = albums[id] || albums[0];
   const albumSongs = songs.filter((item) => item.album === albumData.name);
 
@@ -41,7 +41,7 @@ const DisplayAlbum = () => {
       </div>
       <hr />
       {albumSongs.map((item, index) => (
-        <div onClick={() => playWithId(item.id)}
+        <div onClick={() => playMedia(item)}
           key={index}
           className="grid grid-cols-3 sm:grid-cols-4 mt-4 mb-4 gap-2 p-2 text-[#a7a7a7] hover:bg-[#ffffff2b]  cursor-pointer items-center"
         >

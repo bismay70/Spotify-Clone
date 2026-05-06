@@ -5,24 +5,25 @@ import { PlayerContext } from "../context/PlayerContext";
 import { useSearchParams } from "react-router-dom";
 
 const DisplaySearch = () => {
-  const { songs } = useContext(PlayerContext);
+  const { songs, podcasts } = useContext(PlayerContext);
   const [searchParams, setSearchParams] = useSearchParams();
   const [results, setResults] = useState([]);
   const searchQuery = searchParams.get("q") || "";
 
   useEffect(() => {
     if (searchQuery.trim()) {
-      const filtered = songs.filter(
-        (song) =>
-          song.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          song.desc.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          song.album.toLowerCase().includes(searchQuery.toLowerCase())
+      const allItems = [...songs, ...podcasts];
+      const filtered = allItems.filter(
+        (item) =>
+          item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          item.desc.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          (item.album && item.album.toLowerCase().includes(searchQuery.toLowerCase()))
       );
       setResults(filtered);
     } else {
       setResults([]);
     }
-  }, [searchQuery, songs]);
+  }, [searchQuery, songs, podcasts]);
 
   const handleSearch = (value) => {
     if (value.trim()) {
@@ -40,7 +41,7 @@ const DisplaySearch = () => {
           Search Results for "{searchQuery}"
         </h1>
         {results.length > 0 ? (
-          <div className="flex overflow-auto">
+          <div className="flex overflow-auto gap-2">
             {results.map((item, index) => (
               <SongItem
                 key={index}
@@ -48,6 +49,7 @@ const DisplaySearch = () => {
                 desc={item.desc}
                 id={item.id}
                 image={item.image}
+                song={item}
               />
             ))}
           </div>

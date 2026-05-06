@@ -1,13 +1,20 @@
 import Sidebar from "./components/Sidebar"
 import Player from "./components/Player"
 import Display from "./components/Display"
+import Login from "./components/Login"
 import { useContext } from "react"
 import { PlayerContext } from "./context/PlayerContext"
+import { AuthContext } from "./context/AuthContext"
 
 
 function App() {
 
   const {audioRef,track} = useContext(PlayerContext);
+  const { isAuthenticated } = useContext(AuthContext);
+
+  if (!isAuthenticated) {
+    return <Login />;
+  }
 
   return (
     <div className="h-screen bg-black">

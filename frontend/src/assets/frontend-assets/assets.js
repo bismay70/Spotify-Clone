@@ -180,3 +180,111 @@ export const songsData = [
         duration:"2:35"
     }
 ]
+
+export const newHitsData = [
+    {
+        id:0,
+        name: "Latest Hit One",
+        image: img6,
+        file:song1,
+        desc:"Fresh new releases",
+        duration:"3:05"
+    },
+    {
+        id:1,
+        name: "Latest Hit Two",
+        image: img13,
+        file:song2,
+        desc:"Fresh new releases",
+        duration:"2:40"
+    },
+    {
+        id:2,
+        name: "Latest Hit Three",
+        image: img11,
+        file:song3,
+        desc:"Fresh new releases",
+        duration:"2:55"
+    },
+    {
+        id:3,
+        name: "Latest Hit Four",
+        image: img15,
+        file:song1,
+        desc:"Fresh new releases",
+        duration:"3:20"
+    },
+    {
+        id:4,
+        name: "Latest Hit Five",
+        image: img16,
+        file:song2,
+        desc:"Fresh new releases",
+        duration:"2:50"
+    },
+    {
+        id:5,
+        name: "Latest Hit Six",
+        image: img9,
+        file:song3,
+        desc:"Fresh new releases",
+        duration:"2:25"
+    }
+]
+
+export const podcastsData = [
+    {
+        id:0,
+        name: "The Daily",
+        image: img1,
+        file:song1,
+        desc:"Daily news and insights from journalists",
+        duration:"20:00",
+        host:"The New York Times"
+    },
+    {
+        id:1,
+        name: "Stuff You Should Know",
+        image: img2,
+        file:song2,
+        desc:"Fascinating deep dives into random topics",
+        duration:"45:30",
+        host:"Josh & Chuck"
+    },
+    {
+        id:2,
+        name: "TED Talks Daily",
+        image: img3,
+        file:song3,
+        desc:"Inspiring ideas worth spreading",
+        duration:"15:45",
+        host:"TED"
+    },
+    {
+        id:3,
+        name: "Mindful Minutes",
+        image: img4,
+        file:song1,
+        desc:"Daily meditation and wellness tips",
+        duration:"10:00",
+        host:"Wellness Team"
+    },
+    {
+        id:4,
+        name: "Tech Talk Weekly",
+        image: img5,
+        file:song2,
+        desc:"Latest in technology and innovation",
+        duration:"35:20",
+        host:"Tech Experts"
+    },
+    {
+        id:5,
+        name: "Story Time",
+        image: img7,
+        file:song3,
+        desc:"Engaging stories from around the world",
+        duration:"30:00",
+        host:"The Storyteller"
+    }
+]
